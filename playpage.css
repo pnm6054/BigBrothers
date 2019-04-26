@@ -1,0 +1,11 @@
+body{
+    margin: 2.5%;
+}
+section{
+    float: left;
+}
+aside{
+    float: right;
+    padding: 5%;
+    border-left: solid black 5px;
+}
