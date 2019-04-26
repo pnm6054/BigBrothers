@@ -1,11 +1,16 @@
+header{
+   display: block; 
+}
 body{
     margin: 2.5%;
 }
 section{
-    float: left;
+    display: inline-block;
 }
 aside{
-    float: right;
     padding: 5%;
     border-left: solid black 5px;
+    display: inline-block;
+    position: relative;
+    top: -200px;
 }
