@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Player Display</title>
     <link type="text/css" rel="stylesheet" href="playpage.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script src="assets/js/Chart.min.js"></script>
+    <script src="http://127.0.0.1:8000/socket.io/socket.io.js"></script>
 </head>
+
 <body>
     <header>
         <h1>video player test</h1>
@@ -15,32 +18,40 @@
         </p>
     </header>
     <section>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="800" height="450" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </section>
     <aside>
-        <iframe width="320" height="240" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="320" height="240" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <canvas id="myChart"></canvas>
     </aside>
     <footer>
-        
+
     </footer>
 </body>
 <script>
-var ctx = document.getElementById('myChart').getContext('2d');
+    var socket = io.connect('http://127.0.0.1:8000');
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var label_idx = 0, value_idx = 0;
     var data = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: [],
         datasets: [{
-                label: "My First dataset",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45],
-            }]
+            label: "My First dataset",
+            borderColor: 'rgb(255, 99, 132)',
+            data: [],
+        }]
     };
-    function addData() {
-        myLineChart.data.datasets[0].data[7] = 60;
-        myLineChart.data.labels[7] = "newly added";
+    socket.on('server', function (data) {
+        addData(data.hello)
+    });
+    function addData(value) {
+        myLineChart.data.datasets[0].data[value_idx] = value;
+        myLineChart.data.labels[label_idx] = label_idx + 1;
         myLineChart.update();
-    }
+        label_idx += 1;
+        value_idx += 1;
+    };
     var option = {
         showLine: true
     };
@@ -49,4 +60,5 @@ var ctx = document.getElementById('myChart').getContext('2d');
         option: option
     });
 </script>
+
 </html>
