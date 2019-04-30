@@ -7,7 +7,7 @@
     <link type="text/css" rel="stylesheet" href="playpage.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script src="assets/js/Chart.min.js"></script>
-    <script src="http://127.0.0.1:8000/socket.io/socket.io.js"></script>
+    <script src="assets/js/mylib.js"></script>
 </head>
 
 <body>
@@ -34,34 +34,20 @@
         var src = 'assets/media/video.bmp?time=' + time;
         $('#face').attr('src', src);
     };
+
+    setInterval(refresh,1000);
+
     function load(){
         window.location = "text://"
     }
-    setInterval(refresh,1000);
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var label_idx = 0, value_idx = 0;
-    var data = {
-        labels: [],
-        datasets: [{
-            label: "My First dataset",
-            borderColor: 'rgb(255, 99, 132)',
-            data: [],
-        }]
-    };
-    function addData(value) {
-        myLineChart.data.datasets[0].data[value_idx] = value;
-        myLineChart.data.labels[label_idx] = label_idx + 1;
-        myLineChart.update();
-        label_idx += 1;
-        value_idx += 1;
-    };
-    var option = {
-        showLine: true
-    };
-    var myLineChart = Chart.Line(ctx, {
-        data: data,
-        option: option
-    });
+
+    function refchart() {
+        $.ajax({
+            url: 'assets/media/video.csv',
+            datatype: 'text',
+        }).done(disp_chart);
+    }
+    setInterval(refchart,1000);
 </script>
 
 </html>
