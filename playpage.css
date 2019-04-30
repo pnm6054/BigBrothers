@@ -1,22 +1,19 @@
 header{
    display: block; 
 }
-body{
-    display: inline-block;
-    margin: 2.5%;
-}
+
 section{
-    width: 60%;
+    width: 65%;
     height: 60%;
     float: left;
-    padding: 3%;
+    padding: 1%;
 }
 aside{
     width: 20%;
     height: 60%;
     float: left;
-    padding: 3%;
+    padding: 1%;
 }
 canvas{
-    padding: 5%;
+    padding-top: 20%;
 }
