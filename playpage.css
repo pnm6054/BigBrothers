@@ -3,17 +3,19 @@ header{
 }
 
 section{
-    width: 65%;
+    width: 55%;
     height: 60%;
     float: left;
     padding: 1%;
 }
 aside{
-    width: 20%;
+    width: 30%;
     height: 60%;
     float: left;
     padding: 1%;
 }
 canvas{
-    padding-top: 20%;
+    padding-top: 10%;
+    height: 400px;
+    width: 600px;
 }

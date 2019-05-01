@@ -44,26 +44,36 @@ function disp_chart(chartdata) {
             data: allRows[3],
             label: "confidence",
             borderColor: "#c45850",
+            pointStyle: 'line',
+            borderWidth: 1,
             fill: false
         }, {
             data: allRows[11],
             label: "gaze_angle_x",
             borderColor: "#3e95cd",
+            borderWidth: 1,
+            pointStyle: 'line',
             fill: false
         }, {
             data: allRows[12],
             label: "gaze_angle_y",
             borderColor: "#8e5ea2",
+            borderWidth: 1,
+            pointStyle: 'line',
             fill: false
         }, {
             data: allRows[297],
             label: "pose_Rx",
             borderColor: "#3cba9f",
+            borderWidth: 1,
+            pointStyle: 'line',
             fill: false
         }, {
             data: allRows[298],
             label: "pose_Ry",
             borderColor: "#e8c3b9",
+            borderWidth: 1,
+            pointStyle: 'line',
             fill: false
         }]
     };
@@ -73,7 +83,7 @@ function disp_chart(chartdata) {
         options: {
             animation: {
                 duration: 0
-            }
+            } 
         }
     });
 }
