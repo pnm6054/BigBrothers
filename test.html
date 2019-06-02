@@ -11,15 +11,10 @@
 <body>
   <h1>PoseNet Example</h1>
   <canvas id="canvas" width="640" height="480"></canvas> 
-  <video id="video" width="640" height="480" autoplay style="display: none"></video>
-  <p>
-      confidence: <span id="conf"></span><br>
-      nose: <span id="nose"></span><br>
-      left_eye: <span id="leye"></span><br>
-      right_eye: <span id="reye"></span><br>
-      left_ear: <span id="lear"></span><br>
-      right_ear: <span id="rear"></span><br>
-  </p>
+  <video id="video" width="640" height="480" autoplay>
+    <source src="data/nc.mp4">
+  </video>
+
   <script src="sketch.js"></script>
 </body>
 
