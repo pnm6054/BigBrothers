@@ -1,46 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Player Display</title>
     <link type="text/css" rel="stylesheet" href="playpage.css">
-    <script type="text/javascript">
-        window.onload = function () {
-            var dataPoints = [];
-            var chart;
-            $.getJSON("https://canvasjs.com/services/data/datapoints.php?xstart=1&ystart=10&length=10&type=json", function (data) {
-                $.each(data, function (key, value) {
-                    dataPoints.push({ x: value[0], y: parseInt(value[1]) });
-                });
-                chart = new CanvasJS.Chart("chartContainer", {
-                    title: {
-                        text: "Live Chart with dataPoints from External JSON"
-                    },
-                    data: [{
-                        type: "line",
-                        dataPoints: dataPoints,
-                    }]
-                });
-                chart.render();
-                updateChart();
-            });
-            function updateChart() {
-                $.getJSON("https://canvasjs.com/services/data/datapoints.php?xstart=" + (dataPoints.length + 1) + "&ystart=" + (dataPoints[dataPoints.length - 1].y) + "&length=1&type=json", function (data) {
-                    $.each(data, function (key, value) {
-                        dataPoints.push({
-                            x: parseInt(value[0]),
-                            y: parseInt(value[1])
-                        });
-                    });
-                    chart.render();
-                    setTimeout(function () { updateChart() }, 1000);
-                });
-            }
-        }
-    </script>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+    <script src="assets/js/Chart.min.js"></script>
+    <script src="assets/js/mylib.js"></script>
 </head>
+
 <body>
     <header>
         <h1>video player test</h1>
@@ -49,14 +18,36 @@
         </p>
     </header>
     <section>
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="800" height="450" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </section>
     <aside>
-        <iframe width="320" height="240" src="https://www.youtube.com/embed/-ZrDjwXZGxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        <img id="face" width="240" height="180" src="assets/media/video.bmp">
+        <canvas id="myChart"></canvas>
     </aside>
     <footer>
-        
     </footer>
 </body>
+<script>
+    function refresh(){
+        var time = new Date().getTime();
+        var src = 'assets/media/video.bmp?time=' + time;
+        $('#face').attr('src', src);
+    };
+
+    setInterval(refresh,1000);
+
+    function load(){
+        window.location = "text://"
+    }
+
+    function refchart() {
+        $.ajax({
+            url: 'assets/media/video.csv',
+            datatype: 'text',
+        }).done(disp_chart);
+    }
+    setInterval(refchart,1000);
+</script>
+
 </html>
