@@ -56,7 +56,7 @@ function drawKeypoints()  {
   str_n = '';
   for (let i = 0; i < poses.length; i++) {
     // For each pose detected, loop through all the keypoints
-    str_n += poses[0].pose.score;
+    str_n += '`'+poses[0].pose.score+'`';
     for (let j = 0; j < 11; j++) {
       let keypoint = poses[i].pose.keypoints[j];
       // Only draw an ellipse is the pose probability is bigger than 0.2
@@ -69,7 +69,7 @@ function drawKeypoints()  {
     }
   }
   if (str_n != str) {
-    document.body.appendChild(document.createTextNode(str_n+'\n'));
+    document.body.appendChild(document.createTextNode(str_n + '\n'));
     str = str_n;
   }
 }

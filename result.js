@@ -72,7 +72,26 @@ function drawKeypoints()  {
   }
 }
 
+function dist(ax, ay, bx, by) {
+  return Math.sqrt(Math.pow((ax - bx), 2) + Math.pow((ay - by), 2)) / 600;
+}
+
 async function printPoints() {
   model = await tf.loadLayersModel('http://127.0.0.1:5500/data/my-model.json');
-  console.log(model.summary());
+  if (poses != undefined) {
+    let rst = [];
+    rst.push(poses[0].pose.score);
+    let n = poses[0].pose.keypoints[0];
+    for (let k = 1; k < 11; k += 1) {
+      let a = poses[0].pose.keypoints[k];
+      if (a.score > 0.2) {
+        rst.push(dist(n.position.x, n.position.y, a.position.x, a.position.y));
+      } else {
+        rst.push(0);
+      }
+    }
+    let pred = model.predict(tf.tensor2d(rst,[1,11],'float32'));
+    let readable = pred.dataSync();
+    document.getElementById('value').innerText = readable;
+  }
 }

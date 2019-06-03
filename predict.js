@@ -5,7 +5,7 @@
 let data;
 let pred;
 function dist(ax, ay, bx, by) {
-  return Math.sqrt(Math.pow((ax - bx), 2) + Math.pow((ay - by), 2));
+  return Math.sqrt(Math.pow((ax - bx), 2) + Math.pow((ay - by), 2)) / 600;
 }
 async function getData() {
     const DataReq = await fetch('data/sj.json');
@@ -81,16 +81,12 @@ async function run() {
   const tensorData = convertToTensor(data);
   const {inputs, labels} = tensorData;
 
-  const testTensorData = convertToTensor(test);
-  const {testin, testla} = testTensorData;
-  console.log(testTensorData);
-
   //const testTensorData = convertToTensor(test);
   // Train the model  
   await trainModel(model, inputs, labels);
   console.log('Done Training');
   await model.save('downloads://my-model');
-  testModel(model, testin, testTensorData);
+  testModel(model, test);
 }
 
 document.addEventListener('DOMContentLoaded', run);
@@ -136,12 +132,12 @@ function convertToTensor(data) {
       const labelMax = labelTensor.max();
       const labelMin = labelTensor.min();
   
-      const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-      const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+      //const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+      //'const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
   
       return {
-        inputs: normalizedInputs,
-        labels: normalizedLabels,
+        inputs: inputTensor,
+        labels: labelTensor,
         //inputs: inputTensor,
         //labels: labelTensor,
         // Return the min/max bounds so we can use them later.
@@ -155,14 +151,16 @@ function convertToTensor(data) {
 async function trainModel(model, inputs, labels) {
     // Prepare the model for training.  
     model.compile({
-        optimizer: tf.train.adam(),
-        loss: 'binaryCrossentropy',
-        //loss: 'tf.losses.meanSquaredError',
-        metrics: ['mse'],
+        //optimizer: tf.train.adam(),
+        optimizer: 'sgd',
+        //loss: 'binaryCrossentropy',
+        loss: tf.losses.meanSquaredError,
+        metrics: ['accuracy'],
+        //metrics: ['mse'],
     });
 
-    const batchSize = 20;
-    const epochs = 20;
+    const batchSize = 100;
+    const epochs = 15;
 
     return await model.fit(inputs, labels, {
         batchSize,
@@ -170,13 +168,13 @@ async function trainModel(model, inputs, labels) {
         shuffle: true,
         callbacks: tfvis.show.fitCallbacks(
         { name: 'Training Performance' },
-        ['loss', 'mse'], 
+        ['loss', 'acc'], 
         { height: 200, callbacks: ['onEpochEnd'] }
         )
     });
 }
 
-function testModel(model, inputData, normalizationData) {
+function testModel(model, inputData) {
     //const {inputMax, inputMin, labelMin, labelMax} = normalizationData;  
     
     // Generate predictions for a uniform range of numbers between 0 and 1;
@@ -201,8 +199,13 @@ function testModel(model, inputData, normalizationData) {
     });
     */
     //pred = model.predict(inputData);
-    pred = model.predict(tf.randomNormal([20, 11]));
-    console.log(pred)
+
+    const data = convertToTensor(inputData);
+    const {inputs, labels} = data;
+
+
+    pred = model.predict(inputs);
+    console.log(pred.print());
    
     /*
     const predictedPoints = Array.from(xs).map((val, i) => {
